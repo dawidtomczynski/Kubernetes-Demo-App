@@ -1,0 +1,18 @@
+{{- if .Values.cronjob.enabled -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "demo.fullname" . }}-cleanup
+  namespace: {{ .Values.namespace }}
+spec:
+  schedule: {{ .Values.cronjob.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: {{ include "demo.fullname" . }}-cleanup
+            image: docker.io/bitnami/mongodb:6.0.2-debian-11-r1
+            command: ["mongosh", "mongo-mongodb-0.mongo-mongodb-headless.default.svc.cluster.local:27017", "--authenticationDatabase", "admin", "-u", {{ .Values.cronjob.MONGODB_ROOT_USERNAME }}, "-p", {{ .Values.cronjob.MONGODB_ROOT_PASSWORD }}, "--eval", "db.dropDatabase();"]
+          restartPolicy: Never
+{{- end }}
