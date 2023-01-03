@@ -1,1 +1,1 @@
-GitOps project - tech stack K8s, ArgoCD, Helm
+GitOps project - tech stack K8s, ArgoCD, Helm 
